@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "directory-tree"
+version = "0.1.0"
+description = "Directory tree is a command line script that provides a way to organize files in hierarchical directories. The script allows users to create, move, and delete directories."
+authors = ["Bohdan Biletskyi <biletskyboh@gmail.com>"]
+readme = "README.md"
+packages = [{include = "tree"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pytest = "^7.1.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
