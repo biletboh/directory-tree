@@ -44,9 +44,20 @@ class App:
         if root is None:
             data = self.tree.list()
             root = data["subdirs"]
+            generated_list = self.generate_list(root=root)
+            for node in generated_list:
+                print(node)
+
+    def generate_list(
+        self,
+        depth: int = 0,
+        root: list = [],
+    ):
         for node in root:
-            tab = "  " * depth * 2
+            tab = "  " * depth
             name = node["name"]
-            print(f"{tab}{name}")
+            yield f"{tab}{name}"
             if node["subdirs"]:
-                return self.list(command="", root=node["subdirs"])
+                yield from self.generate_list(
+                    depth=depth + 1, root=node["subdirs"]
+                )

@@ -30,7 +30,25 @@ def tree_data():
             },
             {
                 "name": "drinks",
-                "subdirs": [],
+                "subdirs": [
+                    {
+                        "name": "hot",
+                        "subdirs": [],
+                    },
+                    {
+                        "name": "cold",
+                        "subdirs": [
+                            {
+                                "name": "lemonade",
+                                "subdirs": [],
+                            },
+                            {
+                                "name": "beer",
+                                "subdirs": [],
+                            },
+                        ],
+                    },
+                ],
             },
         ],
     }
