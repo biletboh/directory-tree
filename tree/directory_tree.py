@@ -137,7 +137,7 @@ class DirectoryTree(AbstractDirectoryTree):
             for i, d in enumerate(root):
                 if d["name"] == path[depth]:
                     if len(path) == depth + 1:
-                        del root[i]
+                        return root.pop(i)
                     else:
                         new_root = root[i]["subdirs"]
                         return self.delete(
@@ -145,8 +145,15 @@ class DirectoryTree(AbstractDirectoryTree):
                         )
         return None
 
-    def move(self, path):
-        pass
+    def move(
+        self,
+        path_from: list,
+        path_to: list,
+    ):
+        node = self.delete(path=path_from)
+        path_to.append(node["name"])
+        self.create(path=path_to)
+        return None
 
     def list(self):
         pass

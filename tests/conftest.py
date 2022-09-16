@@ -18,6 +18,10 @@ def tree_data():
                         "name": "potato",
                         "subdirs": [],
                     },
+                    {
+                        "name": "juice",
+                        "subdirs": [],
+                    },
                 ],
             },
             {

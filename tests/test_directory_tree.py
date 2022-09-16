@@ -71,3 +71,24 @@ def test_directory_tree_delete_value_error(tree_data):
     tree.data = tree_data
     with pytest.raises(ValueError, match=f"{path[1]} does not exist"):
         tree.delete(path)
+
+
+def test_directory_tree_move(tree_data):
+    path_from = ["vegetables", "juice"]
+    path_to = ["drinks"]
+    tree = DirectoryTree()
+    tree.data = tree_data
+    tree.move(path_from, path_to)
+    dirnames_from = {d["name"] for d in tree_data["subdirs"][0]["subdirs"]}
+    dirnames_to = {d["name"] for d in tree_data["subdirs"][2]["subdirs"]}
+    assert "juice" not in dirnames_from
+    assert "juice" in dirnames_to
+
+
+def test_directory_tree_move_value_error(tree_data):
+    path_from = ["spices", "juice"]
+    path_to = ["drinks"]
+    tree = DirectoryTree()
+    tree.data = tree_data
+    with pytest.raises(ValueError, match=f"{path_from[1]} does not exist"):
+        tree.move(path_from, path_to)
