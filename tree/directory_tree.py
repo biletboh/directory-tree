@@ -1,5 +1,6 @@
-from collections import UserDict
 from abc import ABC, abstractmethod
+from collections import UserDict
+from typing import Optional
 
 
 class AbstractDirectoryTree(ABC):
@@ -75,8 +76,32 @@ class DirectoryTree(AbstractDirectoryTree):
     def __init__(self):
         self.data = Node()
 
-    def create(self, path):
-        pass
+    def create(
+        self,
+        path: list,
+        depth: int = 0,
+        root: Optional[list] = None,
+    ):
+        """
+        Recursively add nodes to the directory tree.
+        Args:
+            path:
+                A list representing a branch of the directory tree.
+            depth:
+                An int representing depth of the branch.
+            root:
+                A list that points to a parent node. If None root should
+                default to the first node of the directory tree.
+        """
+        if root is None:
+            root = self.data["subdirs"]
+        if len(path) > depth:
+            if not any(path[depth] == d["name"] for d in root):
+                root.append(Node(name=path[depth]))
+            for i, d in enumerate(root):
+                if d["name"] == path[depth]:
+                    new_root = root[i]["subdirs"]
+                    return self.create(path, depth=depth + 1, root=new_root)
 
     def delete(self, path):
         pass
@@ -86,3 +111,7 @@ class DirectoryTree(AbstractDirectoryTree):
 
     def list(self):
         pass
+
+    # def parse(path: str):
+    #     parsed_path = self.parse(path)
+    #     pass

@@ -46,3 +46,11 @@ def test_abstract_issubclass():
     Test if DirectoryTree is subclass of AbstractDirectoryTree.
     """
     assert issubclass(DirectoryTree, AbstractDirectoryTree)
+
+
+def test_directory_tree_create():
+    tree = DirectoryTree()
+    path = ["fruits", "apples"]
+    tree.create(path)
+    assert "fruits" == tree.data["subdirs"][0]["name"]
+    assert "apples" == tree.data["subdirs"][0]["subdirs"][0]["name"]
