@@ -71,6 +71,7 @@ class DirectoryTree(AbstractDirectoryTree):
     The class iherites from AbstractDirectoryTree and implements methods
     such as create, delete, move, and list.
 
+    The class is responsible for data management.
     """
 
     def __init__(self):
@@ -150,10 +151,33 @@ class DirectoryTree(AbstractDirectoryTree):
         path_from: list,
         path_to: list,
     ):
+        """
+        Recursively cuts and pastes nodes within the directory tree.
+
+        Args:
+            path_from:
+                A list representing a branch of the directory tree
+                where method must cut a node.
+            path_to:
+                A list representing a branch of the directory tree
+                where method must paste a node.
+
+        Returns:
+            None.
+
+        Raises:
+            ValueError: node does not exist.
+        """
         node = self.delete(path=path_from)
         path_to.append(node["name"])
         self.create(path=path_to)
         return None
 
     def list(self):
-        pass
+        """
+        Displays the directory tree data.
+
+        Returns:
+            A dict with the directory tree data.
+        """
+        return self.data

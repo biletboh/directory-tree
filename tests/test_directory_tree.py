@@ -92,3 +92,11 @@ def test_directory_tree_move_value_error(tree_data):
     tree.data = tree_data
     with pytest.raises(ValueError, match=f"{path_from[1]} does not exist"):
         tree.move(path_from, path_to)
+
+
+def test_directory_tree_list(node):
+    """
+    Test if Node initializes dict with name and subdirs keys.
+    """
+    tree = DirectoryTree()
+    assert tree.data == node
