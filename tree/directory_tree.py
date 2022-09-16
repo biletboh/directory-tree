@@ -100,6 +100,7 @@ class DirectoryTree(AbstractDirectoryTree):
         if len(path) > depth:
             if not any(path[depth] == d["name"] for d in root):
                 root.append(Node(name=path[depth]))
+                root.sort(key=self.sort_by_name)
             for i, d in enumerate(root):
                 if d["name"] == path[depth]:
                     new_root = root[i]["subdirs"]
@@ -181,3 +182,6 @@ class DirectoryTree(AbstractDirectoryTree):
             A dict with the directory tree data.
         """
         return self._data
+
+    def sort_by_name(self, e):
+        return e["name"]
