@@ -17,30 +17,52 @@ class App:
         """
         self.tree = tree
 
-    def create(self, command, path):
-        print(f"{command} {path}")
-        parsed_path = path.split("/")
-        self.tree.create(parsed_path)
+    def read_commands(self, file):
+        with open(file, "r") as reader:
+            for command in reader.readlines():
+                self.run_command(command)
 
-    def delete(self, command, path):
-        print(f"{command} {path}")
-        parsed_path = path.split("/")
-        self.tree.delete(parsed_path)
+    def run_command(self, command):
+        command = command.strip()
+        print(command)
+        command, path1, path2 = self.parse(command)
+        if command == "CREATE":
+            self.create(path1)
+        elif command == "DELETE":
+            self.delete(path1)
+        elif command == "MOVE":
+            if path2:
+                self.move(path1, path2)
+        elif command == "LIST":
+            self.list()
 
-    def move(self, command, path_from, path_to):
-        print(f"{command} {path_from} {path_to}")
-        parsed_path_from = path_from.split("/")
-        parsed_path_to = path_to.split("/")
-        self.tree.move(parsed_path_from, parsed_path_to)
+    def parse(self, command: str):
+        parsed_command = command.split(" ")
+        command = parsed_command[0]
+        if len(parsed_command) > 1:
+            path1 = parsed_command[1].split("/")
+        else:
+            path1 = None
+        if len(parsed_command) > 2:
+            path2 = parsed_command[2].split("/")
+        else:
+            path2 = None
+        return command, path1, path2
+
+    def create(self, path: list):
+        self.tree.create(path)
+
+    def delete(self, path: list):
+        self.tree.delete(path)
+
+    def move(self, path_from: list, path_to: list):
+        self.tree.move(path_from, path_to)
 
     def list(
         self,
-        command: str,
         depth: int = 0,
         root: Optional[list] = None,
     ):
-        if command:
-            print(command)
         if root is None:
             data = self.tree.list()
             root = data["subdirs"]
