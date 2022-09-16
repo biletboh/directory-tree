@@ -84,6 +84,7 @@ class DirectoryTree(AbstractDirectoryTree):
     ):
         """
         Recursively add nodes to the directory tree.
+
         Args:
             path:
                 A list representing a branch of the directory tree.
@@ -102,16 +103,50 @@ class DirectoryTree(AbstractDirectoryTree):
                 if d["name"] == path[depth]:
                     new_root = root[i]["subdirs"]
                     return self.create(path, depth=depth + 1, root=new_root)
+        return None
 
-    def delete(self, path):
-        pass
+    def delete(
+        self,
+        path: list,
+        depth: int = 0,
+        root: Optional[list] = None,
+    ):
+        """
+        Recursively remove nodes to the directory tree.
+
+        Args:
+            path:
+                A list representing a branch of the directory tree.
+            depth:
+                An int representing depth of the branch.
+            root:
+                A list that points to a parent node. If None root should
+                default to the first node of the directory tree.
+
+        Returns:
+            None or recursive call the method.
+
+        Raises:
+            ValueError: node does not exist.
+        """
+        if root is None:
+            root = self.data["subdirs"]
+        if len(path) > depth:
+            if not any(path[depth] == d["name"] for d in root):
+                raise ValueError(f"{path[depth]} does not exist")
+            for i, d in enumerate(root):
+                if d["name"] == path[depth]:
+                    if len(path) == depth + 1:
+                        del root[i]
+                    else:
+                        new_root = root[i]["subdirs"]
+                        return self.delete(
+                            path, depth=depth + 1, root=new_root
+                        )
+        return None
 
     def move(self, path):
         pass
 
     def list(self):
         pass
-
-    # def parse(path: str):
-    #     parsed_path = self.parse(path)
-    #     pass

@@ -52,5 +52,22 @@ def test_directory_tree_create():
     tree = DirectoryTree()
     path = ["fruits", "apples"]
     tree.create(path)
-    assert "fruits" == tree.data["subdirs"][0]["name"]
-    assert "apples" == tree.data["subdirs"][0]["subdirs"][0]["name"]
+    assert "fruits" == tree.data["subdirs"][-1]["name"]
+    assert "apples" == tree.data["subdirs"][-1]["subdirs"][-1]["name"]
+
+
+def test_directory_tree_delete(tree_data):
+    path = ["vegetables", "potato"]
+    tree = DirectoryTree()
+    tree.data = tree_data
+    tree.delete(path)
+    dirnames = {d["name"] for d in tree_data["subdirs"][0]["subdirs"]}
+    assert "potato" not in dirnames
+
+
+def test_directory_tree_delete_value_error(tree_data):
+    path = ["drinks", "cars"]
+    tree = DirectoryTree()
+    tree.data = tree_data
+    with pytest.raises(ValueError, match=f"{path[1]} does not exist"):
+        tree.delete(path)
