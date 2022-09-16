@@ -21,3 +21,19 @@ def test_app_move(mocker):
     app = App(tree=DirectoryTree())
     app.move("MOVE", "grains/squash", "fruits/apples")
     DirectoryTree.move.assert_called_once()
+
+
+def test_app_list(mocker, tree_data):
+    mocker.patch("tree.directory_tree.DirectoryTree.list")
+    tree = DirectoryTree()
+    tree._data = tree_data
+    app = App(tree=tree)
+    app.list("LIST")
+    DirectoryTree.list.assert_called()
+
+
+def test_app_list_f(tree_data):
+    tree = DirectoryTree()
+    tree._data = tree_data
+    app = App(tree=tree)
+    app.list("LIST")

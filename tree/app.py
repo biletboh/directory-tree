@@ -1,4 +1,5 @@
 from .directory_tree import AbstractDirectoryTree
+from typing import Optional
 
 
 class App:
@@ -31,3 +32,21 @@ class App:
         parsed_path_from = path_from.split("/")
         parsed_path_to = path_to.split("/")
         self.tree.move(parsed_path_from, parsed_path_to)
+
+    def list(
+        self,
+        command: str,
+        depth: int = 0,
+        root: Optional[list] = None,
+    ):
+        if command:
+            print(command)
+        if root is None:
+            data = self.tree.list()
+            root = data["subdirs"]
+        for node in root:
+            tab = "  " * depth * 2
+            name = node["name"]
+            print(f"{tab}{name}")
+            if node["subdirs"]:
+                return self.list(command="", root=node["subdirs"])
