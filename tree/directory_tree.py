@@ -75,7 +75,7 @@ class DirectoryTree(AbstractDirectoryTree):
     """
 
     def __init__(self):
-        self.data = Node()
+        self._data = Node()
 
     def create(
         self,
@@ -96,7 +96,7 @@ class DirectoryTree(AbstractDirectoryTree):
                 default to the first node of the directory tree.
         """
         if root is None:
-            root = self.data["subdirs"]
+            root = self._data["subdirs"]
         if len(path) > depth:
             if not any(path[depth] == d["name"] for d in root):
                 root.append(Node(name=path[depth]))
@@ -131,7 +131,7 @@ class DirectoryTree(AbstractDirectoryTree):
             ValueError: node does not exist.
         """
         if root is None:
-            root = self.data["subdirs"]
+            root = self._data["subdirs"]
         if len(path) > depth:
             if not any(path[depth] == d["name"] for d in root):
                 raise ValueError(f"{path[depth]} does not exist")
@@ -180,4 +180,4 @@ class DirectoryTree(AbstractDirectoryTree):
         Returns:
             A dict with the directory tree data.
         """
-        return self.data
+        return self._data
