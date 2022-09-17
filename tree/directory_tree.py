@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-from collections import UserDict
-from typing import Optional
 
 
 class AbstractDirectoryTree(ABC):
@@ -157,6 +155,3 @@ class DirectoryTree(AbstractDirectoryTree):
             A dict with the directory tree data.
         """
         return self._data
-
-    def sort_by_name(self, e):
-        return e["name"]
