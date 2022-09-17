@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Dict, List
 
 
 class AbstractDirectoryTree(ABC):
@@ -10,21 +11,21 @@ class AbstractDirectoryTree(ABC):
     """
 
     @abstractmethod
-    def create(self, path: str):
+    def create(self, path: List[str]):
         """
         Implement method to insert nodes to the tree.
         """
         pass
 
     @abstractmethod
-    def delete(self, path: str):
+    def delete(self, path: List[str]):
         """
         Implement method to remove nodes from the tree.
         """
         pass
 
     @abstractmethod
-    def move(self, path: str):
+    def move(self, path_from: List[str], path_to: List[str]):
         """
         Implement method to cut and paste nodes within the tree.
         """
@@ -56,7 +57,7 @@ class Node:
                 str representing node's name.
         """
         self.name = name
-        self.subdirs = {}
+        self.subdirs: Dict[str, Node] = {}
 
 
 class DirectoryTree(AbstractDirectoryTree):
@@ -120,11 +121,7 @@ class DirectoryTree(AbstractDirectoryTree):
                 raise ValueError(f"{directory} does not exist")
         return None
 
-    def move(
-        self,
-        path_from: list,
-        path_to: list,
-    ):
+    def move(self, path_from: List[str], path_to: List[str]):
         """
         Recursively cuts and pastes nodes within the directory tree.
 

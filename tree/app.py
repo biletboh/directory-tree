@@ -1,4 +1,5 @@
 from .directory_tree import AbstractDirectoryTree
+from typing import List
 
 
 class App:
@@ -17,7 +18,7 @@ class App:
         """
         self.tree = tree
 
-    def read_commands(self, file):
+    def read_commands(self, file: str):
         """
         Read commands from a file and run them.
 
@@ -77,7 +78,7 @@ class App:
             path2 = None
         return command, path1, path2
 
-    def create(self, path: list):
+    def create(self, path: List[str]):
         """
         Invoke tree create method with path data.
 
@@ -87,7 +88,7 @@ class App:
         """
         self.tree.create(path)
 
-    def delete(self, path: list):
+    def delete(self, path: List[str]):
         """
         Invoke tree delete method with path data.
 
@@ -101,10 +102,10 @@ class App:
         try:
             self.tree.delete(path)
         except ValueError as e:
-            path = "/".join(path)
-            print(f"Cannot delete {path} - {e}")
+            path_str = "/".join(path)
+            print(f"Cannot delete {path_str} - {e}")
 
-    def move(self, path_from: list, path_to: list):
+    def move(self, path_from: List[str], path_to: List[str]):
         """
         Invoke tree move method with path data.
 
