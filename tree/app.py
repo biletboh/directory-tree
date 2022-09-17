@@ -53,7 +53,11 @@ class App:
         self.tree.create(path)
 
     def delete(self, path: list):
-        self.tree.delete(path)
+        try:
+            self.tree.delete(path)
+        except ValueError as e:
+            path = "/".join(path)
+            print(f"Cannot delete {path} - {e}")
 
     def move(self, path_from: list, path_to: list):
         self.tree.move(path_from, path_to)
