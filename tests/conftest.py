@@ -1,54 +1,23 @@
 import pytest
+from tree.directory_tree import Node
 
 
 @pytest.fixture
 def node(name=""):
-    return {"name": name, "subdirs": {}}
+    return Node(name=name)
 
 
 @pytest.fixture
 def tree_data():
-    return {
-        "name": "",
-        "subdirs": [
-            {
-                "name": "vegetables",
-                "subdirs": [
-                    {
-                        "name": "potato",
-                        "subdirs": [],
-                    },
-                    {
-                        "name": "juice",
-                        "subdirs": [],
-                    },
-                ],
-            },
-            {
-                "name": "spices",
-                "subdirs": [],
-            },
-            {
-                "name": "drinks",
-                "subdirs": [
-                    {
-                        "name": "hot",
-                        "subdirs": [],
-                    },
-                    {
-                        "name": "cold",
-                        "subdirs": [
-                            {
-                                "name": "lemonade",
-                                "subdirs": [],
-                            },
-                            {
-                                "name": "beer",
-                                "subdirs": [],
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-    }
+    data = Node()
+    data.subdirs["vegetables"] = Node("vegetables")
+    data.subdirs["fruits"] = Node("fruits")
+    data.subdirs["drinks"] = Node("drinks")
+    data.subdirs["vegetables"].subdirs["potatos"] = Node("potatos")
+    data.subdirs["vegetables"].subdirs["tomatos"] = Node("tomatos")
+    data.subdirs["fruits"].subdirs["apple"] = Node("apple")
+    data.subdirs["fruits"].subdirs["apple"].subdirs["cider"] = Node("cider")
+    data.subdirs["fruits"].subdirs["apple"].subdirs["cider"].subdirs[
+        "homemade"
+    ] = Node("homemade")
+    return data

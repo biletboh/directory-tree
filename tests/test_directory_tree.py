@@ -65,12 +65,11 @@ def test_directory_tree_create():
 
 
 def test_directory_tree_delete(tree_data):
-    path = ["vegetables", "potato"]
+    path = ["vegetables", "potatos"]
     tree = DirectoryTree()
     tree._data = tree_data
     tree.delete(path)
-    dirnames = {d["name"] for d in tree_data["subdirs"][0]["subdirs"]}
-    assert "potato" not in dirnames
+    assert "potato" not in tree._data.subdirs["vegetables"].subdirs
 
 
 def test_directory_tree_delete_value_error(tree_data):
@@ -82,19 +81,18 @@ def test_directory_tree_delete_value_error(tree_data):
 
 
 def test_directory_tree_move(tree_data):
-    path_from = ["vegetables", "juice"]
+    path_from = ["fruits", "apple", "cider"]
     path_to = ["drinks"]
     tree = DirectoryTree()
     tree._data = tree_data
     tree.move(path_from, path_to)
-    dirnames_from = {d["name"] for d in tree_data["subdirs"][0]["subdirs"]}
-    dirnames_to = {d["name"] for d in tree_data["subdirs"][2]["subdirs"]}
-    assert "juice" not in dirnames_from
-    assert "juice" in dirnames_to
+    assert "cider" not in tree._data.subdirs["fruits"].subdirs["apple"].subdirs
+    assert "cider" in tree._data.subdirs["drinks"].subdirs
+    assert "homemade" in tree._data.subdirs["drinks"].subdirs["cider"].subdirs
 
 
 def test_directory_tree_move_value_error(tree_data):
-    path_from = ["spices", "juice"]
+    path_from = ["vegetables", "juice"]
     path_to = ["drinks"]
     tree = DirectoryTree()
     tree._data = tree_data
