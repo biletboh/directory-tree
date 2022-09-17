@@ -25,3 +25,5 @@ Tests cover most of the package business logic. To run automated tests, call:
 ```
 pytest
 ```
+
+   [poetry]: <https://python-poetry.org/docs/#installation>
