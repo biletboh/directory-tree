@@ -40,25 +40,25 @@ class AbstractDirectoryTree(ABC):
         pass
 
 
-class Node(UserDict):
+class Node:
     """
     The class that defines nodes of DirectoryTree.
 
     Attributes:
-        data: A dict that stores node name as str and subdirs as list.
+        name: str that stores directory names.
+        subdirs: list of directory subdirectories.
     """
 
-    def __init__(self, *args, name: str = "", **kwargs):
+    def __init__(self, name: str = ""):
         """
         Initializes node and sets node's name and subdirs.
 
         Args:
             name:
-                A string representing node's name.
+                str representing node's name.
         """
-        super().__init__(*args, name=name, **kwargs)
-        self.data["name"] = name
-        self.data["subdirs"] = []
+        self.name = name
+        self.subdirs = {}
 
 
 class DirectoryTree(AbstractDirectoryTree):
@@ -80,9 +80,6 @@ class DirectoryTree(AbstractDirectoryTree):
     def create(
         self,
         path: list,
-        depth: int = 0,
-        root: Optional[list] = None,
-        insert: Optional[list] = None,
     ):
         """
         Recursively add nodes to the directory tree.
@@ -96,21 +93,14 @@ class DirectoryTree(AbstractDirectoryTree):
                 A list that points to a parent node. If None root should
                 default to the first node of the directory tree.
         """
-        if root is None:
-            root = self._data["subdirs"]
-        if len(path) > depth:
-            if not any(path[depth] == d["name"] for d in root):
-                root.append(Node(name=path[depth]))
-                root.sort(key=self.sort_by_name)
-            for i, d in enumerate(root):
-                if d["name"] == path[depth]:
-                    new_root = root[i]["subdirs"]
-                    return self.create(
-                        path, depth=depth + 1, root=new_root, insert=insert
-                    )
-        if insert is not None:
-            root += insert
-            root.sort(key=self.sort_by_name)
+        node = self._data
+        for directory in path:
+            if directory in node.subdirs:
+                node = node.subdirs[directory]
+            else:
+                new_node = Node(name=directory)
+                node.subdirs[directory] = new_node
+                node = new_node
         return None
 
     def delete(

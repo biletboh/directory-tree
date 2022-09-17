@@ -33,12 +33,13 @@ def test_abstarct_tree_methods(method):
         "fruits",
     ],
 )
-def test_node(name, node):
+def test_node(name):
     """
     Test if Node initializes dict with name and subdirs keys.
     """
-    node["name"] = name
-    assert node == Node(name=name)
+    node = Node(name=name)
+    assert node.name == name
+    assert node.subdirs == {}
 
 
 def test_abstract_issubclass():
@@ -50,10 +51,17 @@ def test_abstract_issubclass():
 
 def test_directory_tree_create():
     tree = DirectoryTree()
-    path = ["fruits", "apples"]
-    tree.create(path)
-    assert "fruits" == tree._data["subdirs"][-1]["name"]
-    assert "apples" == tree._data["subdirs"][-1]["subdirs"][-1]["name"]
+    path1 = ["fruits", "apples"]
+    path2 = ["fruits", "berries", "strawberries"]
+    tree.create(path1)
+    tree.create(path2)
+    assert "fruits" in tree._data.subdirs
+    assert "apples" in tree._data.subdirs["fruits"].subdirs
+    assert "berries" in tree._data.subdirs["fruits"].subdirs
+    assert (
+        "strawberries"
+        in tree._data.subdirs["fruits"].subdirs["berries"].subdirs
+    )
 
 
 def test_directory_tree_delete(tree_data):
@@ -94,9 +102,9 @@ def test_directory_tree_move_value_error(tree_data):
         tree.move(path_from, path_to)
 
 
-def test_directory_tree_list(node):
+def test_directory_tree_list():
     """
     Test if Node initializes dict with name and subdirs keys.
     """
     tree = DirectoryTree()
-    assert tree._data == node
+    assert tree._data == tree.list()
