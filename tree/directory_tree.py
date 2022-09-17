@@ -82,6 +82,7 @@ class DirectoryTree(AbstractDirectoryTree):
         path: list,
         depth: int = 0,
         root: Optional[list] = None,
+        insert: Optional[list] = None,
     ):
         """
         Recursively add nodes to the directory tree.
@@ -104,7 +105,12 @@ class DirectoryTree(AbstractDirectoryTree):
             for i, d in enumerate(root):
                 if d["name"] == path[depth]:
                     new_root = root[i]["subdirs"]
-                    return self.create(path, depth=depth + 1, root=new_root)
+                    return self.create(
+                        path, depth=depth + 1, root=new_root, insert=insert
+                    )
+        if insert is not None:
+            root += insert
+            root.sort(key=self.sort_by_name)
         return None
 
     def delete(
@@ -171,7 +177,7 @@ class DirectoryTree(AbstractDirectoryTree):
         """
         node = self.delete(path=path_from)
         path_to.append(node["name"])
-        self.create(path=path_to)
+        self.create(path=path_to, insert=node["subdirs"])
         return None
 
     def list(self):
