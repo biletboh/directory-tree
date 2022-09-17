@@ -3,12 +3,10 @@ from tree.directory_tree import Node
 
 
 @pytest.fixture
-def node(name=""):
-    return Node(name=name)
-
-
-@pytest.fixture
 def tree_data():
+    """
+    Populate DirectoryTree with data.
+    """
     data = Node()
     data.subdirs["vegetables"] = Node("vegetables")
     data.subdirs["fruits"] = Node("fruits")

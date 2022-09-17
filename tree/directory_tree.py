@@ -62,7 +62,7 @@ class Node:
 class DirectoryTree(AbstractDirectoryTree):
     """
     The DirectoryTree is data structure that consist of root node that
-    store nodes as subdirs that may contain other subdirs.
+    store nodes in node subdirs. Each node contain other nodes in subdirs.
 
     This data structures imitates the behavior of the os directory tree.
 

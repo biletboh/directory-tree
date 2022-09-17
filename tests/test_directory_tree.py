@@ -50,6 +50,9 @@ def test_abstract_issubclass():
 
 
 def test_directory_tree_create():
+    """
+    Test if DirectoryTree can create child nodes.
+    """
     tree = DirectoryTree()
     path1 = ["fruits", "apples"]
     path2 = ["fruits", "berries", "strawberries"]
@@ -65,6 +68,9 @@ def test_directory_tree_create():
 
 
 def test_directory_tree_delete(tree_data):
+    """
+    Test if DirectoryTree can delete child nodes.
+    """
     path = ["vegetables", "potatos"]
     tree = DirectoryTree()
     tree._data = tree_data
@@ -73,6 +79,10 @@ def test_directory_tree_delete(tree_data):
 
 
 def test_directory_tree_delete_value_error(tree_data):
+    """
+    Test if DirectoryTree delete method raises value error
+    in cases there is nothing to delete.
+    """
     path = ["drinks", "cars"]
     tree = DirectoryTree()
     tree._data = tree_data
@@ -81,6 +91,9 @@ def test_directory_tree_delete_value_error(tree_data):
 
 
 def test_directory_tree_move(tree_data):
+    """
+    Test if DirectoryTree can move child elements within the tree.
+    """
     path_from = ["fruits", "apple", "cider"]
     path_to = ["drinks"]
     tree = DirectoryTree()
@@ -92,6 +105,10 @@ def test_directory_tree_move(tree_data):
 
 
 def test_directory_tree_move_value_error(tree_data):
+    """
+    Check if DirectoryTree move method raises value error
+    in case there is no child to move.
+    """
     path_from = ["vegetables", "juice"]
     path_to = ["drinks"]
     tree = DirectoryTree()
