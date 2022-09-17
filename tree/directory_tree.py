@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-from collections import UserDict
-from typing import Optional
 
 
 class AbstractDirectoryTree(ABC):
@@ -40,25 +38,25 @@ class AbstractDirectoryTree(ABC):
         pass
 
 
-class Node(UserDict):
+class Node:
     """
     The class that defines nodes of DirectoryTree.
 
     Attributes:
-        data: A dict that stores node name as str and subdirs as list.
+        name: str that stores directory names.
+        subdirs: list of directory subdirectories.
     """
 
-    def __init__(self, *args, name: str = "", **kwargs):
+    def __init__(self, name: str = ""):
         """
         Initializes node and sets node's name and subdirs.
 
         Args:
             name:
-                A string representing node's name.
+                str representing node's name.
         """
-        super().__init__(*args, name=name, **kwargs)
-        self.data["name"] = name
-        self.data["subdirs"] = []
+        self.name = name
+        self.subdirs = {}
 
 
 class DirectoryTree(AbstractDirectoryTree):
@@ -77,80 +75,49 @@ class DirectoryTree(AbstractDirectoryTree):
     def __init__(self):
         self._data = Node()
 
-    def create(
-        self,
-        path: list,
-        depth: int = 0,
-        root: Optional[list] = None,
-        insert: Optional[list] = None,
-    ):
+    def create(self, path: list, insert: dict = {}):
         """
         Recursively add nodes to the directory tree.
 
         Args:
             path:
                 A list representing a branch of the directory tree.
-            depth:
-                An int representing depth of the branch.
-            root:
-                A list that points to a parent node. If None root should
-                default to the first node of the directory tree.
         """
-        if root is None:
-            root = self._data["subdirs"]
-        if len(path) > depth:
-            if not any(path[depth] == d["name"] for d in root):
-                root.append(Node(name=path[depth]))
-                root.sort(key=self.sort_by_name)
-            for i, d in enumerate(root):
-                if d["name"] == path[depth]:
-                    new_root = root[i]["subdirs"]
-                    return self.create(
-                        path, depth=depth + 1, root=new_root, insert=insert
-                    )
-        if insert is not None:
-            root += insert
-            root.sort(key=self.sort_by_name)
+        node = self._data
+        for directory in path:
+            if directory in node.subdirs:
+                node = node.subdirs[directory]
+            else:
+                new_node = Node(name=directory)
+                node.subdirs[directory] = new_node
+                node = new_node
+        if insert:
+            node.subdirs = insert
         return None
 
-    def delete(
-        self,
-        path: list,
-        depth: int = 0,
-        root: Optional[list] = None,
-    ):
+    def delete(self, path: list):
         """
         Recursively remove nodes to the directory tree.
 
         Args:
             path:
                 A list representing a branch of the directory tree.
-            depth:
-                An int representing depth of the branch.
-            root:
-                A list that points to a parent node. If None root should
-                default to the first node of the directory tree.
-
         Returns:
-            None or recursive call the method.
+            Removed node.
 
         Raises:
             ValueError: node does not exist.
         """
-        if root is None:
-            root = self._data["subdirs"]
-        if len(path) > depth:
-            if not any(path[depth] == d["name"] for d in root):
-                raise ValueError(f"{path[depth]} does not exist")
-            for i, d in enumerate(root):
-                if d["name"] == path[depth]:
-                    if len(path) == depth + 1:
-                        return root.pop(i)
-                    else:
-                        new_root = root[i]["subdirs"]
-                        return self.delete(
-                            path, depth=depth + 1, root=new_root
-                        )
+        node = self._data
+        depth = len(path)
+        for i, directory in enumerate(path):
+            if directory in node.subdirs:
+                if depth == i + 1:
+                    removed = node.subdirs.pop(directory)
+                    return removed
+                node = node.subdirs[directory]
+            else:
+                raise ValueError(f"{directory} does not exist")
         return None
 
     def move(
@@ -176,8 +143,8 @@ class DirectoryTree(AbstractDirectoryTree):
             ValueError: node does not exist.
         """
         node = self.delete(path=path_from)
-        path_to.append(node["name"])
-        self.create(path=path_to, insert=node["subdirs"])
+        path_to.append(node.name)
+        self.create(path=path_to, insert=node.subdirs)
         return None
 
     def list(self):
@@ -188,6 +155,3 @@ class DirectoryTree(AbstractDirectoryTree):
             A dict with the directory tree data.
         """
         return self._data
-
-    def sort_by_name(self, e):
-        return e["name"]
